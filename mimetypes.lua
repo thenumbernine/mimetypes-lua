@@ -1,11 +1,12 @@
 local class = require 'ext.class'
 local fromlua = require 'ext.fromlua'
 local file = require 'ext.file'
-local MIME = class()
 
-MIME.filename = 'mimetypes.conf'
+local MIMETypes = class()
 
-function MIME:init(filename)
+MIMETypes.filename = 'mimetypes.conf'
+
+function MIMETypes:init(filename)
 	 self.filename = filename
 	 self.types = fromlua(file[self.filename] or '')
 	if not self.types then
@@ -25,4 +26,4 @@ function MIME:init(filename)
 	end
 end
 
-return MIME
+return MIMETypes
