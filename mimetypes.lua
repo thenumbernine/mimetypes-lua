@@ -1,5 +1,6 @@
 local class = require 'ext.class'
 local fromlua = require 'ext.fromlua'
+local tolua = require 'ext.tolua'
 local file = require 'ext.file'
 
 local MIMETypes = class()
@@ -14,6 +15,7 @@ function MIMETypes:init(filename)
 		self.types = {}
 		for _,source in pairs{'application','audio','image','message','model','multipart','text','video'} do
 			print('fetching '..source..' mime types...')
+			local http = require 'socket.http'
 			local csv = CSV.string(assert(http.request('http://www.iana.org/assignments/media-types/'..source..'.csv')))
 			csv:setColumnNames(csv.rows:remove(1))
 			for _,row in ipairs(csv.rows) do
