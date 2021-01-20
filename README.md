@@ -7,3 +7,5 @@ It gets them from iana.org.
 It also automatically associates the .js file format with the .javascript file format.
 
 Depends on my lua-ext and lua-csv projects.
+
+Expects luasocket, curl, or wget to be installed for downloading the file.

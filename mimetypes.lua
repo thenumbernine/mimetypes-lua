@@ -33,8 +33,8 @@ local MIMETypes = class()
 MIMETypes.filename = 'mimetypes.conf'
 
 function MIMETypes:init(filename)
-	 self.filename = filename
-	 self.types = fromlua(file[self.filename] or '')
+	self.filename = filename
+	self.types = fromlua(file[self.filename] or '')
 	if not self.types then
 		local CSV = require 'csv'
 		self.types = {}
