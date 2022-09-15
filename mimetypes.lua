@@ -13,15 +13,15 @@ local function getFile(url)
 	-- curl
 	if os.execute('curl --help 2> /dev/null') then
 		os.execute('curl -o tmp.csv '..url)
-		local data = assert(file['tmp.csv'])
-		os.remove'tmp.csv'
+		local data = assert(file'tmp.csv':read())
+		file'tmp.csv':remove()
 		return data
 	end
 
 	if os.execute('wget --help 2> /dev/null') then
 		os.execute('wget -O tmp.csv '..url)
-		local data = assert(file['tmp.csv'])
-		os.remove'tmp.csv'
+		local data = assert(file'tmp.csv':read())
+		file'tmp.csv':remove()
 		return data
 	end
 
@@ -34,7 +34,7 @@ MIMETypes.filename = 'mimetypes.conf'
 
 function MIMETypes:init(filename)
 	self.filename = filename
-	self.types = fromlua(file[self.filename] or '')
+	self.types = fromlua(file(self.filename):read() or '')
 	if not self.types then
 		local CSV = require 'csv'
 		self.types = {}
@@ -45,11 +45,11 @@ function MIMETypes:init(filename)
 			for _,row in ipairs(csv.rows) do
 				self.types[row.Name:lower()] = row.Template
 			end
-			os.remove('tmp.csv')
+			file'tmp.csv':remove()
 		end
 		-- well this is strange
 		self.types.js = self.types.js or self.types.javascript
-		file[self.filename] =  tolua(self.types,{indent = true})
+		file(self.filename):write(tolua(self.types,{indent = true}))
 	end
 end
 
