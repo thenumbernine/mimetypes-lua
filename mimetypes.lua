@@ -1,7 +1,7 @@
 local class = require 'ext.class'
 local fromlua = require 'ext.fromlua'
 local tolua = require 'ext.tolua'
-local file = require 'ext.file'
+local path = require 'ext.path'
 
 local function getFile(url)
 	-- luasocket
@@ -13,15 +13,15 @@ local function getFile(url)
 	-- curl
 	if os.execute('curl --help 2> /dev/null') then
 		os.execute('curl -o tmp.csv '..url)
-		local data = assert(file'tmp.csv':read())
-		file'tmp.csv':remove()
+		local data = assert(path'tmp.csv':read())
+		path'tmp.csv':remove()
 		return data
 	end
 
 	if os.execute('wget --help 2> /dev/null') then
 		os.execute('wget -O tmp.csv '..url)
-		local data = assert(file'tmp.csv':read())
-		file'tmp.csv':remove()
+		local data = assert(path'tmp.csv':read())
+		path'tmp.csv':remove()
 		return data
 	end
 
@@ -34,7 +34,7 @@ MIMETypes.filename = 'mimetypes.conf'
 
 function MIMETypes:init(filename)
 	self.filename = filename
-	self.types = fromlua(file(self.filename):read() or '')
+	self.types = fromlua(path(self.filename):read() or '')
 	if not self.types then
 		local CSV = require 'csv'
 		self.types = {}
@@ -45,11 +45,11 @@ function MIMETypes:init(filename)
 			for _,row in ipairs(csv.rows) do
 				self.types[row.Name:lower()] = row.Template
 			end
-			file'tmp.csv':remove()
+			path'tmp.csv':remove()
 		end
 		-- well this is strange
 		self.types.js = self.types.js or self.types.javascript
-		file(self.filename):write(tolua(self.types,{indent = true}))
+		path(self.filename):write(tolua(self.types,{indent = true}))
 	end
 end
 
