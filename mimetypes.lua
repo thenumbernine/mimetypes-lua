@@ -47,8 +47,11 @@ function MIMETypes:init(filename)
 			end
 			path'tmp.csv':remove()
 		end
+
 		-- well this is strange
 		self.types.js = self.types.js or self.types.javascript
+		self.types.txt = self.types.txt or "text/plain"
+
 		path(self.filename):write(tolua(self.types,{indent = true}))
 	end
 end
