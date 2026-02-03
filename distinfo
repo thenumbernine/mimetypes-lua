@@ -1,0 +1,14 @@
+--------------------------------------------
+-- generated with dist/build-distinfo.rua --
+--------------------------------------------
+
+name = "mimetypes"
+files = {
+	"README.md",
+	"mimetypes.lua",
+}
+deps = {
+	"csv",
+	"ext",
+	"url",
+}

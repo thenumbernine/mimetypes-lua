@@ -2,6 +2,7 @@ local class = require 'ext.class'
 local fromlua = require 'ext.fromlua'
 local tolua = require 'ext.tolua'
 local path = require 'ext.path'
+local URL = require 'url'
 
 local function getFile(url)
 	-- luasocket
@@ -40,7 +41,11 @@ function MIMETypes:init(filename)
 		self.types = {}
 		for _,source in pairs{'application','audio','image','message','model','multipart','text','video'} do
 			print('fetching '..source..' mime types...')
-			local csv = CSV.string(getFile('http://www.iana.org/assignments/media-types/'..source..'.csv'))
+			local csv = CSV.string(getFile(URL{
+				scheme = 'http',
+				host = 'www.iana.org',
+				path = 'assignments/media-types/'..source..'.csv'
+			}:tostring()))
 			csv:setColumnNames(csv.rows:remove(1))
 			for _,row in ipairs(csv.rows) do
 				self.types[row.Name:lower()] = row.Template
